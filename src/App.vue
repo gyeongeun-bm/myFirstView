@@ -11,12 +11,29 @@
 
 <script>
 import ToDoItem from "./components/ToDoItem.vue";
+import axios from "axios"
 
 export default {
   name: "app",
   components: {
     ToDoItem,
   },
+  beforeMount() {
+    console.log("beforeMount")
+
+    this.test()
+  },
+  methods: {
+    test() {
+      console.log("test")
+      axios.get('http://127.0.0.1:5000/v1/manufacturer').then((response) => {
+        console.log(response.data);
+        let res = response.data.response.body
+        console.log(res);
+      })
+    }
+
+  }
 };
 </script>
 

@@ -6,7 +6,6 @@
 </template>
 
 <script>
-
 export default {
   props: {
     label: { required: true, type: String },

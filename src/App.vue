@@ -1,59 +1,71 @@
 <template>
   <div id="app">
-    <h1>List Test</h1>
-    <ul></ul>
-    <to-do-item
+    <ProductItem
       v-for="item in list"
-      :label="item.name"
+      :product_name="item.product_name"
+      :brand_name="item.brand_name"
+      :manufacturer_name="item.manufacturer_name"
       v-bind:key="item"
-    ></to-do-item>
+    >
+      {{ item.product_name }}
+      {{ item.brand_name }}
+      {{ item.manufacturer_name }}
+    </ProductItem>
+  </div>
+  <div>
+    <button @click="more">더보기</button>
   </div>
 </template>
 
 <script>
-import ToDoItem from "./components/ToDoItem.vue";
 import axios from "axios";
+import ProductItem from "./components/ProductItem.vue";
 
 export default {
   name: "app",
   components: {
-    ToDoItem,
+    ProductItem,
   },
   data() {
     return {
-      list: null,
-      title: "test",
+      list: [],
+      page: 1,
     };
   },
   beforeMount() {
     console.log("beforeMount");
-
-    this.test();
+    this.product();
   },
   methods: {
-    test() {
-      console.log("test");
-      axios.get("http://127.0.0.1:5000/v1/manufacturer").then(response => {
+    product() {
+      axios.get("http://127.0.0.1:5000/v1/product").then(response => {
         //console.log(response.data);
         let _data = response.data.data;
-        console.log(_data);
+        console.log("data", _data);
         this.list = _data.list;
         console.log(this.list);
         //let res = response.data.response.body;
         //console.log(res);
       });
     },
+    more() {
+      const options = {
+        params: {
+          _page: this.page++,
+          _limit: 5,
+        },
+      };
+      this.page++;
+      axios
+        .get("http://127.0.0.1:5000/v1/product", options)
+        .then(res => {
+          let _data = res.data.data;
+          console.log(_data);
+          this.list = [...this.list, ..._data.list];
+          // console.log(this.list);
+        })
+        .catch(err => console.error(err));
+    },
   },
 };
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

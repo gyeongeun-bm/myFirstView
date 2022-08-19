@@ -34,37 +34,61 @@ export default {
   },
   beforeMount() {
     console.log("beforeMount");
+    this.list = [];
+    this.page = 1;
+
     this.product();
   },
   methods: {
     product() {
-      axios.get("http://127.0.0.1:5000/v1/product").then(response => {
+      console.log(this.page);
+
+      const options = {
+        params: {
+          page: this.page,
+          per_page: 5,
+        },
+      };
+
+      axios.get("http://127.0.0.1:5000/v1/product", options).then(response => {
         //console.log(response.data);
         let _data = response.data.data;
-        console.log("data", _data);
-        this.list = _data.list;
-        console.log(this.list);
+        //console.log("data", _data);
+        //this.list.push(_data.list);
+        _data.list.forEach(element => {
+          this.list.push(element);
+        });
+        //this.list.concat(_data.list);
+        //console.log(_data.list);
+
         //let res = response.data.response.body;
         //console.log(res);
       });
     },
     more() {
-      const options = {
-        params: {
-          _page: this.page++,
-          _limit: 5,
-        },
-      };
-      this.page++;
-      axios
-        .get("http://127.0.0.1:5000/v1/product", options)
-        .then(res => {
-          let _data = res.data.data;
-          console.log(_data);
-          this.list = [...this.list, ..._data.list];
-          // console.log(this.list);
-        })
-        .catch(err => console.error(err));
+      this.page += 1;
+      this.product();
+      //   const options = {
+      //     params: {
+      //       _page: this.page++,
+      //       _limit: 5,
+      //     },
+      //   };
+      //   this.page++;
+      //   axios
+      //     .get("http://127.0.0.1:5000/v1/product", options)
+      //     .then(res => {
+      //       let _data = res.data.data;
+      //       console.log(_data);
+      //       this.list = [...this.list, ..._data.list];
+      //       // console.log(this.list);
+      //     })
+      //     .catch(err => console.error(err));
+    },
+  },
+  ctreated: {
+    function() {
+      this.more();
     },
   },
 };

@@ -1,8 +1,10 @@
 <template>
   <div class="content">
-    <p>{{ brand_name }}</p>
-    <p>{{ product_name }}</p>
-    <p>{{ manufacturer_name }}</p>
+    <div class="box">
+      <p>{{ brand_name }}</p>
+      <p>{{ product_name }}</p>
+      <p>{{ manufacturer_name }}</p>
+    </div>
   </div>
 </template>
 
@@ -28,7 +30,18 @@ export default {
 
 .content {
   display: flex;
-  justify-content: center;
-  align-items: left;
+  flex-direction: column;
+  align-items: center;
+}
+.box {
+  border: solid 1px gray;
+  margin-bottom: 10px;
+  width: 300px;
+  height: 100px;
+  text-align: center;
+}
+
+.box p {
+  margin: 10px;
 }
 </style>

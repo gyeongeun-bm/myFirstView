@@ -1,9 +1,12 @@
 <template>
   <div class="content">
     <div class="box">
+      <p id="favor">{{ favor }}</p>
       <p>{{ brand_name }}</p>
       <p>{{ product_name }}</p>
       <p>{{ manufacturer_name }}</p>
+      <!-- <p>{{ product_id }}</p> -->
+      <img :src="img" />
     </div>
   </div>
 </template>
@@ -14,6 +17,9 @@ export default {
     brand_name: { required: true, type: String },
     product_name: { required: true, type: String },
     manufacturer_name: { required: true, type: String },
+    img: { required: true, type: String },
+    favor: { required: true, type: String },
+    product_id: { required: true, type: Number },
   },
 };
 </script>
@@ -27,7 +33,6 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
-
 .content {
   display: flex;
   flex-direction: column;
@@ -37,11 +42,13 @@ export default {
   border: solid 1px gray;
   margin-bottom: 10px;
   width: 300px;
-  height: 100px;
+  height: 150px;
   text-align: center;
 }
-
 .box p {
   margin: 10px;
+}
+#favor {
+  color: orangered;
 }
 </style>

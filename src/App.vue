@@ -3,13 +3,19 @@
     <ProductItem
       v-for="item in list"
       :product_name="item.product_name"
+      :product_id="item.id"
       :brand_name="item.brand_name"
       :manufacturer_name="item.manufacturer_name"
+      :img="item.img"
       v-bind:key="item"
+      :favor="favor.get(item.id)"
     >
       {{ item.product_name }}
       {{ item.brand_name }}
       {{ item.manufacturer_name }}
+      {{ item.img }}
+      {{ item.id }}
+      {{ favor.get(item.id) }}
     </ProductItem>
   </div>
   <div>
@@ -30,13 +36,13 @@ export default {
     return {
       list: [],
       page: 1,
+      favor: new Map(),
     };
   },
   beforeMount() {
     console.log("beforeMount");
     this.list = [];
     this.page = 1;
-
     this.product();
   },
   methods: {
@@ -49,46 +55,25 @@ export default {
           per_page: 5,
         },
       };
-
       axios.get("http://127.0.0.1:5000/v1/product", options).then(response => {
-        //console.log(response.data);
-        let _data = response.data.data;
-        //console.log("data", _data);
-        //this.list.push(_data.list);
+        const _data = response.data.data;
+        console.log(_data);
         _data.list.forEach(element => {
           this.list.push(element);
+          console.log("http://127.0.0.1:5000/v1/favor/product/" + element.id);
+          axios
+            .get("http://127.0.0.1:5000/v1/favor/product/" + element.id)
+            .then(res => {
+              this.favor.set(element.id, res.data.message);
+            });
         });
-        //this.list.concat(_data.list);
-        //console.log(_data.list);
-
-        //let res = response.data.response.body;
-        //console.log(res);
+        // const array = this.list.concat(_data.list);
+        // console.log(array);
       });
     },
     more() {
       this.page += 1;
       this.product();
-      //   const options = {
-      //     params: {
-      //       _page: this.page++,
-      //       _limit: 5,
-      //     },
-      //   };
-      //   this.page++;
-      //   axios
-      //     .get("http://127.0.0.1:5000/v1/product", options)
-      //     .then(res => {
-      //       let _data = res.data.data;
-      //       console.log(_data);
-      //       this.list = [...this.list, ..._data.list];
-      //       // console.log(this.list);
-      //     })
-      //     .catch(err => console.error(err));
-    },
-  },
-  ctreated: {
-    function() {
-      this.more();
     },
   },
 };

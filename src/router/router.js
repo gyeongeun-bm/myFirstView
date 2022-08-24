@@ -1,20 +1,17 @@
-import { createRouter, createWebHistory } from "vue-router";
-import ProductItems from "@/views/products/ProductItems";
+import {createRouter, createWebHistory} from "vue-router";
+import ProductList from "@/views/products/ProductList";
 
-const routes = createRouter({
-  history: createWebHistory(),
-  route: [
+const routes = [
     {
-      path: "/",
-      name: "ProductItems",
-      component: "ProductItems",
+        path: "/",
+        name: "ProductList",
+        component: ProductList,
     },
-  ],
-});
+]
 
 const router = createRouter({
-  history: createWebHistory(),
-  routes: routes,
+    history: createWebHistory(),
+    routes: routes,
 });
 
 export default router;
